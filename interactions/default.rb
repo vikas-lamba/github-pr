@@ -122,6 +122,7 @@ module GithubPR
 
   class SetStatusAction < Action
     def action(pull)
+      return # DEBUG
       GithubClient.new(@metadata).create_status(pull.head.sha, @c)
     end
   end
@@ -148,8 +149,10 @@ Processing #{pull.base.repo.full_name} PR id #{pull.number} by #{pull.head.user.
     def command(key = "command")
       cmd = @c[key] or raise
       relative_cmd = File.join(@metadata[:config_base_path], cmd)
-      return [relative_cmd] if File.exist?(relative_cmd)
-      [cmd]
+      #return [relative_cmd] if File.exist?(relative_cmd)
+      return ["echo", relative_cmd] if File.exist?(relative_cmd) # DEBUG
+      #[cmd]
+      ["echo", cmd] # DEBUG
     end
 
     def parameters(key = "parameters")
